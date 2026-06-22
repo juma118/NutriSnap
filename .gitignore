@@ -32,14 +32,17 @@ backend/__pycache__/
 backend/*.db
 backend/uploads/
 
+
 # Logs
 npm-debug.*
 yarn-debug.*
 yarn-error.*
 *.log
+SETUP.md
 
 # Editor / OS
 .DS_Store
 .vscode/
 .idea/
 Thumbs.db
+
