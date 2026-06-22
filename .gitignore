@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Expo
+app/.expo/
+app/dist/
+app/web-build/
+*.orig.*
+
+# Native
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Python / FastAPI backend
+backend/.venv/
+backend/__pycache__/
+**/__pycache__/
+*.py[cod]
+backend/*.db
+backend/uploads/
+
+# Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*.log
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db

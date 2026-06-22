@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "NutriSnap",
+    "slug": "nutrisnap",
+    "scheme": "nutrisnap",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#0E9F6E"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nutrisnap.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "NutriSnap uses the camera to capture meal photos for nutrition analysis.",
+        "NSPhotoLibraryUsageDescription": "NutriSnap accesses your photos so you can analyze meals from your library."
+      }
+    },
+    "android": {
+      "package": "com.nutrisnap.app"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "NutriSnap accesses your photos so you can analyze meals from your library.",
+          "cameraPermission": "NutriSnap uses the camera to capture meal photos for nutrition analysis."
+        }
+      ]
+    ],
+    "extra": {}
+  }
+}
