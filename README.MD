@@ -17,6 +17,28 @@ This repo includes a **fully working backend and a minimal Expo client**:
 
 👉 **See [SETUP.md](SETUP.md)** for end-to-end setup: run the backend, then the app.
 
+---
+
+# 📱 Screenshots
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/01-auth.svg" width="190" alt="Sign in / demo login"/></td>
+    <td><img src="docs/screenshots/02-dashboard.svg" width="190" alt="Daily dashboard"/></td>
+    <td><img src="docs/screenshots/03-analyze.svg" width="190" alt="AI photo analysis"/></td>
+    <td><img src="docs/screenshots/04-coach.svg" width="190" alt="AI Meal Coach"/></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Sign in / demo</sub></td>
+    <td align="center"><sub>Daily dashboard</sub></td>
+    <td align="center"><sub>AI photo analysis</sub></td>
+    <td align="center"><sub>AI Meal Coach</sub></td>
+  </tr>
+</table>
+
+> These are UI mockups using the app's real palette/layout. To swap in real
+> device captures, see [docs/screenshots/](docs/screenshots/README.md).
+
 # 🚀 Project Overview
 
 NutriSnap is a mobile-first nutrition assistant that allows users to:

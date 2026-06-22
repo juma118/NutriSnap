@@ -10,6 +10,7 @@ import {
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import type { ScreenProps } from "../navigation";
 import type { Meal, Profile } from "../types";
@@ -83,11 +84,11 @@ export function DashboardScreen({ navigation }: ScreenProps<"Dashboard">) {
   const header = (
     <View>
       <View style={styles.topRow}>
-        <View>
-          <Text style={styles.greeting}>
+        <View style={styles.greetingWrap}>
+          <Text style={styles.greeting} numberOfLines={1}>
             Hi{profile?.full_name ? `, ${profile.full_name}` : ""} 👋
           </Text>
-          <Text style={styles.date}>
+          <Text style={styles.date} numberOfLines={1}>
             {new Date().toLocaleDateString([], {
               weekday: "long",
               month: "long",
@@ -98,12 +99,17 @@ export function DashboardScreen({ navigation }: ScreenProps<"Dashboard">) {
         <View style={styles.topActions}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Profile")}
-            style={styles.signOut}
+            style={styles.iconBtn}
+            accessibilityLabel="Edit goals"
           >
-            <Text style={styles.signOutText}>⚙︎ Goals</Text>
+            <Ionicons name="settings-outline" size={20} color={colors.textMuted} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={signOut} style={styles.signOut}>
-            <Text style={styles.signOutText}>Sign out</Text>
+          <TouchableOpacity
+            onPress={signOut}
+            style={styles.iconBtn}
+            accessibilityLabel="Sign out"
+          >
+            <Ionicons name="log-out-outline" size={20} color={colors.textMuted} />
           </TouchableOpacity>
         </View>
       </View>
@@ -222,17 +228,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 18,
   },
-  greeting: { fontSize: 24, fontWeight: "800", color: colors.text },
+  greetingWrap: { flex: 1, marginRight: 10 },
+  greeting: { fontSize: 22, fontWeight: "800", color: colors.text },
   date: { fontSize: 14, color: colors.textMuted, marginTop: 2 },
-  topActions: { flexDirection: "row", gap: 8 },
-  signOut: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 10,
+  topActions: { flexDirection: "row", gap: 10, flexShrink: 0 },
+  iconBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: colors.border,
+    backgroundColor: colors.card,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  signOutText: { color: colors.textMuted, fontWeight: "600" },
   coachButton: {
     flexDirection: "row",
     alignItems: "center",
