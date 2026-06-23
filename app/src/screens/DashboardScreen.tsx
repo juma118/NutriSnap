@@ -10,6 +10,7 @@ import {
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import type { ScreenProps } from "../navigation";
@@ -23,7 +24,7 @@ import { useAuth } from "../context/AuthContext";
 import { MacroBar } from "../components/MacroBar";
 import { ProgressBar } from "../components/ProgressBar";
 import { MealCard } from "../components/MealCard";
-import { colors } from "../theme";
+import { colors, gradients, radius, shadow } from "../theme";
 
 export function DashboardScreen({ navigation }: ScreenProps<"Dashboard">) {
   const { signOut } = useAuth();
@@ -114,22 +115,28 @@ export function DashboardScreen({ navigation }: ScreenProps<"Dashboard">) {
         </View>
       </View>
 
-      <View style={styles.summaryCard}>
-        <Text style={styles.summaryLabel}>Calories today</Text>
+      <LinearGradient
+        colors={gradients.hero}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.heroCard}
+      >
+        <Text style={styles.heroLabel}>CALORIES TODAY</Text>
         <View style={styles.calorieRow}>
           <Text style={styles.calorieValue}>{totals.calories}</Text>
-          <Text style={styles.calorieGoal}> / {calorieGoal} kcal</Text>
+          <Text style={styles.calorieGoal}>/ {calorieGoal} kcal</Text>
         </View>
         <ProgressBar
           value={totals.calories}
           goal={calorieGoal}
-          color={colors.primary}
+          color={colors.onBrand}
+          trackColor={colors.onBrandTrack}
           height={12}
         />
         <Text style={styles.remaining}>{remaining} kcal remaining</Text>
+      </LinearGradient>
 
-        <View style={styles.divider} />
-
+      <View style={styles.macroCard}>
         <MacroBar
           label="Protein"
           value={totals.protein}
@@ -151,12 +158,27 @@ export function DashboardScreen({ navigation }: ScreenProps<"Dashboard">) {
       </View>
 
       <TouchableOpacity
-        style={styles.coachButton}
+        style={styles.coachWrap}
         onPress={() => navigation.navigate("Coach")}
-        activeOpacity={0.85}
+        activeOpacity={0.9}
       >
-        <Text style={styles.coachButtonText}>🍽️  Ask the AI coach</Text>
-        <Text style={styles.coachButtonArrow}>›</Text>
+        <LinearGradient
+          colors={gradients.coach}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.coachButton}
+        >
+          <View style={styles.coachLeft}>
+            <Text style={styles.coachEmoji}>🍽️</Text>
+            <View>
+              <Text style={styles.coachButtonText}>Ask the AI coach</Text>
+              <Text style={styles.coachButtonSub}>
+                Personalized advice for today
+              </Text>
+            </View>
+          </View>
+          <Text style={styles.coachButtonArrow}>›</Text>
+        </LinearGradient>
       </TouchableOpacity>
 
       <Text style={styles.sectionTitle}>Today's meals</Text>
@@ -205,9 +227,17 @@ export function DashboardScreen({ navigation }: ScreenProps<"Dashboard">) {
       <TouchableOpacity
         style={styles.fab}
         onPress={() => navigation.navigate("AddMeal")}
-        activeOpacity={0.85}
+        activeOpacity={0.9}
       >
-        <Text style={styles.fabText}>＋ Snap a meal</Text>
+        <LinearGradient
+          colors={gradients.brand}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.fabInner}
+        >
+          <Ionicons name="camera" size={18} color={colors.onBrand} />
+          <Text style={styles.fabText}>Snap a meal</Text>
+        </LinearGradient>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -241,37 +271,57 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
     alignItems: "center",
     justifyContent: "center",
+    ...shadow.card,
+  },
+  heroCard: {
+    borderRadius: radius.xl,
+    padding: 22,
+    marginBottom: 14,
+    overflow: "hidden",
+    ...shadow.raised,
+  },
+  heroLabel: {
+    fontSize: 12,
+    color: colors.onBrandFaint,
+    fontWeight: "800",
+    letterSpacing: 1,
+  },
+  calorieRow: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    marginVertical: 6,
+    gap: 6,
+  },
+  calorieValue: { fontSize: 42, fontWeight: "900", color: colors.onBrand },
+  calorieGoal: { fontSize: 15, color: colors.onBrandFaint, marginBottom: 8 },
+  remaining: { fontSize: 13, color: colors.onBrandFaint, marginTop: 10, fontWeight: "600" },
+  macroCard: {
+    backgroundColor: colors.card,
+    borderRadius: radius.lg,
+    paddingTop: 18,
+    paddingBottom: 4,
+    paddingHorizontal: 18,
+    marginBottom: 22,
+    ...shadow.card,
+  },
+  coachWrap: {
+    borderRadius: radius.lg,
+    marginBottom: 24,
+    overflow: "hidden",
+    ...shadow.raised,
   },
   coachButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: colors.primaryDark,
-    borderRadius: 16,
     paddingVertical: 16,
     paddingHorizontal: 18,
-    marginBottom: 22,
   },
-  coachButtonText: { color: "#fff", fontSize: 16, fontWeight: "800" },
-  coachButtonArrow: { color: "#fff", fontSize: 22, fontWeight: "800" },
-  summaryCard: {
-    backgroundColor: colors.card,
-    borderRadius: 20,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginBottom: 22,
-  },
-  summaryLabel: { fontSize: 14, color: colors.textMuted, fontWeight: "600" },
-  calorieRow: { flexDirection: "row", alignItems: "flex-end", marginVertical: 6 },
-  calorieValue: { fontSize: 36, fontWeight: "800", color: colors.primary },
-  calorieGoal: { fontSize: 16, color: colors.textMuted, marginBottom: 6 },
-  remaining: { fontSize: 13, color: colors.textMuted, marginTop: 8 },
-  divider: {
-    height: 1,
-    backgroundColor: colors.border,
-    marginVertical: 16,
-  },
+  coachLeft: { flexDirection: "row", alignItems: "center", gap: 12 },
+  coachEmoji: { fontSize: 24 },
+  coachButtonText: { color: colors.onBrand, fontSize: 16, fontWeight: "800" },
+  coachButtonSub: { color: colors.onBrandFaint, fontSize: 12, marginTop: 2 },
+  coachButtonArrow: { color: colors.onBrand, fontSize: 24, fontWeight: "800" },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
@@ -287,26 +337,28 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   sampleButton: {
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: colors.primary,
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 18,
+    borderRadius: radius.md,
+    paddingVertical: 11,
+    paddingHorizontal: 20,
+    backgroundColor: colors.primaryTint,
   },
-  sampleButtonText: { color: colors.primaryDark, fontWeight: "700" },
+  sampleButtonText: { color: colors.primaryDark, fontWeight: "800" },
   fab: {
     position: "absolute",
     bottom: 28,
     alignSelf: "center",
-    backgroundColor: colors.primary,
-    paddingVertical: 15,
-    paddingHorizontal: 28,
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 5,
+    borderRadius: radius.pill,
+    ...shadow.raised,
   },
-  fabText: { color: "#fff", fontSize: 16, fontWeight: "800" },
+  fabInner: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingVertical: 15,
+    paddingHorizontal: 26,
+    borderRadius: radius.pill,
+  },
+  fabText: { color: colors.onBrand, fontSize: 16, fontWeight: "800" },
 });

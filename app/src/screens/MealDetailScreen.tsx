@@ -11,7 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { ScreenProps } from "../navigation";
 import { deleteMeal, getImageUrl } from "../services/meals";
-import { colors } from "../theme";
+import { colors, radius, shadow } from "../theme";
 
 export function MealDetailScreen({ route, navigation }: ScreenProps<"MealDetail">) {
   const { meal } = route.params;
@@ -119,7 +119,7 @@ function Macro({
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.bg },
   container: { padding: 20, paddingBottom: 40 },
-  image: { width: "100%", height: 240, borderRadius: 18 },
+  image: { width: "100%", height: 240, borderRadius: radius.lg, ...shadow.card },
   imagePlaceholder: {
     backgroundColor: colors.primarySoft,
     alignItems: "center",
@@ -134,11 +134,10 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: colors.card,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderRadius: radius.lg,
     padding: 18,
     marginTop: 18,
+    ...shadow.card,
   },
   calorieRow: { flexDirection: "row", alignItems: "flex-end" },
   calories: { fontSize: 32, fontWeight: "800", color: colors.primary },

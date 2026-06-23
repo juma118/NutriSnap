@@ -15,7 +15,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import type { ScreenProps } from "../navigation";
 import type { NutritionGoal, Profile } from "../types";
 import { getProfile, updateProfile } from "../services/meals";
-import { colors } from "../theme";
+import { GradientButton } from "../components/GradientButton";
+import { colors, radius, shadow } from "../theme";
 
 const GOALS: { key: NutritionGoal; label: string }[] = [
   { key: "lose", label: "Lose" },
@@ -130,13 +131,12 @@ export function ProfileScreen({ navigation }: ScreenProps<"Profile">) {
             onChange={(v) => set({ daily_fat_goal: num(v) })}
           />
 
-          <TouchableOpacity style={styles.save} onPress={save} disabled={saving}>
-            {saving ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.saveText}>Save goals</Text>
-            )}
-          </TouchableOpacity>
+          <GradientButton
+            label="Save goals"
+            onPress={save}
+            loading={saving}
+            style={styles.save}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -216,12 +216,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 12,
+    borderRadius: radius.md,
     paddingHorizontal: 14,
     paddingVertical: 6,
     marginTop: 10,
+    ...shadow.card,
   },
   fieldLabel: { fontSize: 15, color: colors.text },
   fieldInput: {
@@ -232,12 +231,5 @@ const styles = StyleSheet.create({
     color: colors.text,
     paddingVertical: 8,
   },
-  save: {
-    backgroundColor: colors.primary,
-    borderRadius: 14,
-    paddingVertical: 15,
-    alignItems: "center",
-    marginTop: 28,
-  },
-  saveText: { color: "#fff", fontSize: 16, fontWeight: "800" },
+  save: { marginTop: 28 },
 });

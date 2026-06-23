@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import type { Meal } from "../types";
-import { colors } from "../theme";
+import { getImageUrl } from "../services/meals";
+import { colors, radius, shadow } from "../theme";
 
 const MEAL_EMOJI: Record<string, string> = {
   breakfast: "🍳",
@@ -21,11 +22,16 @@ export function MealCard({
     hour: "numeric",
     minute: "2-digit",
   });
+  const thumb = getImageUrl(meal);
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
-      <View style={styles.emojiWrap}>
-        <Text style={styles.emoji}>{MEAL_EMOJI[meal.meal_type] ?? "🍴"}</Text>
-      </View>
+      {thumb ? (
+        <Image source={{ uri: thumb }} style={styles.thumb} />
+      ) : (
+        <View style={styles.emojiWrap}>
+          <Text style={styles.emoji}>{MEAL_EMOJI[meal.meal_type] ?? "🍴"}</Text>
+        </View>
+      )}
       <View style={styles.body}>
         <Text style={styles.name} numberOfLines={1}>
           {meal.name}
@@ -56,19 +62,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: colors.card,
-    borderRadius: 16,
+    borderRadius: radius.lg,
     padding: 14,
     marginBottom: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
+    ...shadow.card,
   },
   emojiWrap: {
     width: 48,
     height: 48,
-    borderRadius: 12,
-    backgroundColor: colors.primarySoft,
+    borderRadius: radius.md,
+    backgroundColor: colors.primaryTint,
     alignItems: "center",
     justifyContent: "center",
+  },
+  thumb: {
+    width: 48,
+    height: 48,
+    borderRadius: radius.md,
+    backgroundColor: colors.primaryTint,
   },
   emoji: { fontSize: 24 },
   body: { flex: 1, marginLeft: 12 },

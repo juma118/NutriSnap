@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  ActivityIndicator,
   ScrollView,
   Alert,
 } from "react-native";
@@ -14,7 +13,8 @@ import * as ImagePicker from "expo-image-picker";
 import type { ScreenProps } from "../navigation";
 import type { MealAnalysis, MealType } from "../types";
 import { analyzeMeal, saveMeal } from "../services/meals";
-import { colors } from "../theme";
+import { GradientButton } from "../components/GradientButton";
+import { colors, radius, shadow } from "../theme";
 
 const MEAL_TYPES: MealType[] = ["breakfast", "lunch", "dinner", "snack"];
 
@@ -147,17 +147,13 @@ export function AddMealScreen({ navigation }: ScreenProps<"AddMeal">) {
         </View>
 
         {!analysis && (
-          <TouchableOpacity
-            style={[styles.primaryButton, !imageBase64 && styles.disabled]}
+          <GradientButton
+            label="🧠  Analyze nutrition"
             onPress={runAnalysis}
-            disabled={!imageBase64 || analyzing}
-          >
-            {analyzing ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.primaryButtonText}>🧠 Analyze nutrition</Text>
-            )}
-          </TouchableOpacity>
+            loading={analyzing}
+            disabled={!imageBase64}
+            style={styles.cta}
+          />
         )}
 
         {analysis && (
@@ -189,17 +185,12 @@ export function AddMealScreen({ navigation }: ScreenProps<"AddMeal">) {
             <Text style={styles.subLabel}>Coach tip</Text>
             <Text style={styles.tip}>{analysis.recommendation}</Text>
 
-            <TouchableOpacity
-              style={styles.primaryButton}
+            <GradientButton
+              label="Save to log"
               onPress={save}
-              disabled={saving}
-            >
-              {saving ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.primaryButtonText}>Save to log</Text>
-              )}
-            </TouchableOpacity>
+              loading={saving}
+              style={styles.cta}
+            />
             <TouchableOpacity onPress={runAnalysis} style={styles.reanalyze}>
               <Text style={styles.reanalyzeText}>Re-analyze</Text>
             </TouchableOpacity>
@@ -231,7 +222,7 @@ function Macro({
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.bg },
   container: { padding: 20, paddingBottom: 40 },
-  preview: { width: "100%", height: 240, borderRadius: 18 },
+  preview: { width: "100%", height: 240, borderRadius: radius.lg, ...shadow.card },
   placeholder: {
     width: "100%",
     height: 240,
@@ -271,23 +262,14 @@ const styles = StyleSheet.create({
   },
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipText: { color: colors.textMuted, fontWeight: "600", textTransform: "capitalize" },
-  chipTextActive: { color: "#fff" },
-  primaryButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 14,
-    paddingVertical: 15,
-    alignItems: "center",
-    marginTop: 22,
-  },
-  primaryButtonText: { color: "#fff", fontSize: 16, fontWeight: "800" },
-  disabled: { opacity: 0.5 },
+  chipTextActive: { color: colors.onBrand },
+  cta: { marginTop: 22 },
   resultCard: {
     backgroundColor: colors.card,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderRadius: radius.lg,
     padding: 18,
     marginTop: 24,
+    ...shadow.card,
   },
   resultName: { fontSize: 20, fontWeight: "800", color: colors.text },
   scoreRow: { flexDirection: "row", alignItems: "flex-end", marginTop: 8 },

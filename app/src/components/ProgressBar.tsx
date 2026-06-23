@@ -6,16 +6,23 @@ export function ProgressBar({
   value,
   goal,
   color = colors.primary,
+  trackColor = colors.border,
   height = 10,
 }: {
   value: number;
   goal: number;
   color?: string;
+  trackColor?: string;
   height?: number;
 }) {
   const pct = goal > 0 ? Math.min(value / goal, 1) : 0;
   return (
-    <View style={[styles.track, { height, borderRadius: height / 2 }]}>
+    <View
+      style={[
+        styles.track,
+        { height, borderRadius: height / 2, backgroundColor: trackColor },
+      ]}
+    >
       <View
         style={{
           width: `${pct * 100}%`,
@@ -31,7 +38,6 @@ export function ProgressBar({
 const styles = StyleSheet.create({
   track: {
     width: "100%",
-    backgroundColor: colors.border,
     overflow: "hidden",
   },
 });

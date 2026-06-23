@@ -11,7 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import type { ScreenProps } from "../navigation";
 import type { Coach } from "../types";
 import { getCoach } from "../services/meals";
-import { colors } from "../theme";
+import { colors, radius, shadow } from "../theme";
 
 export function CoachScreen(_props: ScreenProps<"Coach">) {
   const [coach, setCoach] = useState<Coach | null>(null);
@@ -111,11 +111,10 @@ const styles = StyleSheet.create({
   loadingText: { color: colors.textMuted, marginTop: 12 },
   card: {
     backgroundColor: colors.card,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderRadius: radius.lg,
     padding: 18,
     marginBottom: 8,
+    ...shadow.card,
   },
   headline: { fontSize: 18, fontWeight: "800", color: colors.primaryDark },
   summary: { fontSize: 15, color: colors.text, marginTop: 8, lineHeight: 22 },
@@ -129,7 +128,7 @@ const styles = StyleSheet.create({
   tipRow: { flexDirection: "row", marginBottom: 8 },
   tipBullet: { color: colors.primary, fontSize: 16, marginRight: 8, lineHeight: 22 },
   tipText: { flex: 1, fontSize: 15, color: colors.text, lineHeight: 22 },
-  nextCard: { backgroundColor: colors.primarySoft, borderColor: colors.primarySoft },
+  nextCard: { backgroundColor: colors.primaryTint },
   nextText: { fontSize: 15, color: colors.primaryDark, lineHeight: 22, fontWeight: "600" },
   errorCard: {
     backgroundColor: "#FDE8E8",
