@@ -39,6 +39,7 @@ yarn-debug.*
 yarn-error.*
 *.log
 SETUP.md
+docs/*.md
 
 # Editor / OS
 .DS_Store

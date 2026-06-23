@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import * as SplashScreen from "expo-splash-screen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { AuthProvider, useAuth } from "./src/context/AuthContext";
 import { DialogProvider } from "./src/components/AppDialog";
+import { AnimatedSplash } from "./src/components/AnimatedSplash";
+
+// Keep the native splash up until our animated splash takes over (no flash).
+SplashScreen.preventAutoHideAsync().catch(() => {});
 import { AuthScreen } from "./src/screens/AuthScreen";
 import { DashboardScreen } from "./src/screens/DashboardScreen";
 import { AddMealScreen } from "./src/screens/AddMealScreen";
@@ -80,16 +85,19 @@ function Root() {
 }
 
 export default function App() {
+  const [splashDone, setSplashDone] = useState(false);
+
   return (
     <SafeAreaProvider>
       <AuthProvider>
         <DialogProvider>
           <NavigationContainer>
-            <StatusBar style="dark" />
+            <StatusBar style={splashDone ? "dark" : "light"} />
             <Root />
           </NavigationContainer>
         </DialogProvider>
       </AuthProvider>
+      {!splashDone && <AnimatedSplash onFinish={() => setSplashDone(true)} />}
     </SafeAreaProvider>
   );
 }
