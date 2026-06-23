@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { AuthProvider, useAuth } from "./src/context/AuthContext";
+import { DialogProvider } from "./src/components/AppDialog";
 import { AuthScreen } from "./src/screens/AuthScreen";
 import { DashboardScreen } from "./src/screens/DashboardScreen";
 import { AddMealScreen } from "./src/screens/AddMealScreen";
@@ -82,10 +83,12 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <AuthProvider>
-        <NavigationContainer>
-          <StatusBar style="dark" />
-          <Root />
-        </NavigationContainer>
+        <DialogProvider>
+          <NavigationContainer>
+            <StatusBar style="dark" />
+            <Root />
+          </NavigationContainer>
+        </DialogProvider>
       </AuthProvider>
     </SafeAreaProvider>
   );

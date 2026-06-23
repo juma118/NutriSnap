@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
@@ -16,6 +15,7 @@ import type { ScreenProps } from "../navigation";
 import type { NutritionGoal, Profile } from "../types";
 import { getProfile, updateProfile } from "../services/meals";
 import { GradientButton } from "../components/GradientButton";
+import { useDialog } from "../components/AppDialog";
 import { colors, radius, shadow } from "../theme";
 
 const GOALS: { key: NutritionGoal; label: string }[] = [
@@ -25,6 +25,7 @@ const GOALS: { key: NutritionGoal; label: string }[] = [
 ];
 
 export function ProfileScreen({ navigation }: ScreenProps<"Profile">) {
+  const dialog = useDialog();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -32,7 +33,7 @@ export function ProfileScreen({ navigation }: ScreenProps<"Profile">) {
   useEffect(() => {
     getProfile()
       .then(setProfile)
-      .catch((err) => Alert.alert("Could not load profile", err.message))
+      .catch((err) => dialog.alert("Could not load profile", err.message))
       .finally(() => setLoading(false));
   }, []);
 
@@ -58,7 +59,7 @@ export function ProfileScreen({ navigation }: ScreenProps<"Profile">) {
       });
       navigation.goBack();
     } catch (err: any) {
-      Alert.alert("Could not save", err.message ?? String(err));
+      dialog.alert("Could not save", err.message ?? String(err));
     } finally {
       setSaving(false);
     }

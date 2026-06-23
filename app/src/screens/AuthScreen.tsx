@@ -7,17 +7,18 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  Alert,
   ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../context/AuthContext";
 import { GradientButton } from "../components/GradientButton";
+import { useDialog } from "../components/AppDialog";
 import { colors, gradients, radius, shadow } from "../theme";
 
 export function AuthScreen() {
   const { signIn, signUp, demoLogin } = useAuth();
+  const dialog = useDialog();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ export function AuthScreen() {
 
   const submit = async () => {
     if (!email || !password) {
-      Alert.alert("Missing info", "Please enter your email and password.");
+      dialog.alert("Missing info", "Please enter your email and password.");
       return;
     }
     setBusy(true);
@@ -37,7 +38,7 @@ export function AuthScreen() {
         await signIn(email.trim(), password);
       }
     } catch (err: any) {
-      Alert.alert("Authentication failed", err.message ?? String(err));
+      dialog.alert("Authentication failed", err.message ?? String(err));
     } finally {
       setBusy(false);
     }
@@ -48,7 +49,7 @@ export function AuthScreen() {
     try {
       await demoLogin();
     } catch (err: any) {
-      Alert.alert("Demo login failed", err.message ?? String(err));
+      dialog.alert("Demo login failed", err.message ?? String(err));
     } finally {
       setBusy(false);
     }

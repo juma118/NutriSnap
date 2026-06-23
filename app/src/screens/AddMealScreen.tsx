@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
@@ -14,11 +13,13 @@ import type { ScreenProps } from "../navigation";
 import type { MealAnalysis, MealType } from "../types";
 import { analyzeMeal, saveMeal } from "../services/meals";
 import { GradientButton } from "../components/GradientButton";
+import { useDialog } from "../components/AppDialog";
 import { colors, radius, shadow } from "../theme";
 
 const MEAL_TYPES: MealType[] = ["breakfast", "lunch", "dinner", "snack"];
 
 export function AddMealScreen({ navigation }: ScreenProps<"AddMeal">) {
+  const dialog = useDialog();
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<string>("image/jpeg");
@@ -41,7 +42,7 @@ export function AddMealScreen({ navigation }: ScreenProps<"AddMeal">) {
   const takePhoto = async () => {
     const perm = await ImagePicker.requestCameraPermissionsAsync();
     if (!perm.granted) {
-      Alert.alert("Camera permission needed", "Enable camera access to snap meals.");
+      dialog.alert("Camera permission needed", "Enable camera access to snap meals.");
       return;
     }
     handlePicked(
@@ -66,7 +67,7 @@ export function AddMealScreen({ navigation }: ScreenProps<"AddMeal">) {
 
   const runAnalysis = async () => {
     if (!imageBase64) {
-      Alert.alert("Pick a photo first");
+      dialog.alert("Pick a photo first");
       return;
     }
     setAnalyzing(true);
@@ -79,7 +80,7 @@ export function AddMealScreen({ navigation }: ScreenProps<"AddMeal">) {
       setAnalysis(result);
       if (result.meal_type) setMealType(result.meal_type);
     } catch (err: any) {
-      Alert.alert("Analysis failed", err.message ?? String(err));
+      dialog.alert("Analysis failed", err.message ?? String(err));
     } finally {
       setAnalyzing(false);
     }
@@ -97,7 +98,7 @@ export function AddMealScreen({ navigation }: ScreenProps<"AddMeal">) {
       });
       navigation.goBack();
     } catch (err: any) {
-      Alert.alert("Could not save meal", err.message ?? String(err));
+      dialog.alert("Could not save meal", err.message ?? String(err));
     } finally {
       setSaving(false);
     }

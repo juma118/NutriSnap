@@ -6,33 +6,33 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { ScreenProps } from "../navigation";
 import { deleteMeal, getImageUrl } from "../services/meals";
+import { useDialog } from "../components/AppDialog";
 import { colors, radius, shadow } from "../theme";
 
 export function MealDetailScreen({ route, navigation }: ScreenProps<"MealDetail">) {
   const { meal } = route.params;
+  const dialog = useDialog();
   const imageUrl = getImageUrl(meal);
 
   const confirmDelete = () => {
-    Alert.alert("Delete meal", "Remove this meal from your log?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await deleteMeal(meal.id);
-            navigation.goBack();
-          } catch (err: any) {
-            Alert.alert("Could not delete", err.message ?? String(err));
-          }
-        },
+    dialog.confirm({
+      title: "Delete meal",
+      message: "Remove this meal from your log?",
+      confirmLabel: "Delete",
+      destructive: true,
+      onConfirm: async () => {
+        try {
+          await deleteMeal(meal.id);
+          navigation.goBack();
+        } catch (err: any) {
+          dialog.alert("Could not delete", err.message ?? String(err));
+        }
       },
-    ]);
+    });
   };
 
   return (

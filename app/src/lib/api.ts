@@ -60,9 +60,34 @@ export async function api<T = any>(
   }
 
   if (!res.ok) {
-    const detail =
-      (data && (data.detail || data.message)) || `Request failed (${res.status})`;
-    throw new Error(typeof detail === "string" ? detail : JSON.stringify(detail));
+    throw new Error(formatApiError(data, res.status));
   }
   return data as T;
+}
+
+// Turn FastAPI error payloads into a readable, user-friendly message.
+// - HTTPException → { detail: "string" }
+// - Validation (422) → { detail: [{ loc, msg, ... }] }
+function formatApiError(data: any, status: number): string {
+  const detail = data?.detail;
+  if (typeof detail === "string") return detail;
+
+  if (Array.isArray(detail)) {
+    const messages = detail.map((d) => {
+      const field = Array.isArray(d?.loc) ? d.loc[d.loc.length - 1] : undefined;
+      const raw = String(d?.msg ?? "Invalid value").replace(/^Value error,\s*/i, "");
+      // Friendlier copy for the most common cases.
+      if (/valid email address/i.test(raw)) return "Please enter a valid email address.";
+      if (field && field !== "body") {
+        const label = String(field).replace(/_/g, " ");
+        return `${label.charAt(0).toUpperCase()}${label.slice(1)}: ${raw}`;
+      }
+      return raw;
+    });
+    // De-dupe and keep it short.
+    return [...new Set(messages)].slice(0, 3).join("\n");
+  }
+
+  if (typeof data?.message === "string") return data.message;
+  return `Request failed (${status})`;
 }

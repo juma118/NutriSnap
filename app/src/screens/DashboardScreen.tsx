@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   RefreshControl,
   ActivityIndicator,
-  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -24,10 +23,12 @@ import { useAuth } from "../context/AuthContext";
 import { MacroBar } from "../components/MacroBar";
 import { ProgressBar } from "../components/ProgressBar";
 import { MealCard } from "../components/MealCard";
+import { useDialog } from "../components/AppDialog";
 import { colors, gradients, radius, shadow } from "../theme";
 
 export function DashboardScreen({ navigation }: ScreenProps<"Dashboard">) {
   const { signOut } = useAuth();
+  const dialog = useDialog();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [meals, setMeals] = useState<Meal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +40,7 @@ export function DashboardScreen({ navigation }: ScreenProps<"Dashboard">) {
       setProfile(p);
       setMeals(m);
     } catch (err: any) {
-      Alert.alert("Could not load data", err.message ?? String(err));
+      dialog.alert("Could not load data", err.message ?? String(err));
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -70,7 +71,7 @@ export function DashboardScreen({ navigation }: ScreenProps<"Dashboard">) {
       await loadSampleMeals();
       await load();
     } catch (err: any) {
-      Alert.alert("Could not add samples", err.message ?? String(err));
+      dialog.alert("Could not add samples", err.message ?? String(err));
     }
   };
 
